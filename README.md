@@ -6,6 +6,11 @@ A lightweight quiz app you can run locally. Supports importing your own question
 
 [Download the offline ZIP](./mman1130-quiz-offline.zip)
 
+## Desktop app downloads
+
+Grab the latest installers for Windows and macOS from the Releases page:
+- https://github.com/CaptainBertie/mman1130-quiz/releases/latest
+
 ## Prerequisites
 - Node.js 18+ (20+ recommended)
 - npm (comes with Node)
