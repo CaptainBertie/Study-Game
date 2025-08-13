@@ -366,7 +366,7 @@ const styles = {
     gap: 6,
     height: "100%",
     overflowY: "auto" as const,
-    paddingRight: 0,
+    paddingRight: 4,
     alignItems: "flex-start" as const,
     justifyContent: "flex-start" as const,
     overscrollBehavior: "contain" as const,
