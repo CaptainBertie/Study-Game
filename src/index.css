@@ -76,10 +76,10 @@ body {
 html, body {
   /* Layer hero clouds over two staggered repeating tiles for consistent density */
   background-image: var(--page-bg), var(--page-bg-tile-1), var(--page-bg-tile-2);
-  background-attachment: fixed;
+  background-attachment: fixed, fixed, fixed;
   background-repeat: no-repeat, repeat, repeat;
-  background-size: auto, var(--page-bg-tile-size-1, 520px 520px), var(--page-bg-tile-size-2, 340px 340px);
-  background-position: center top, left top, right 120px top 120px; /* slight offset on the second tile */
+  background-size: cover, var(--page-bg-tile-size-1, 420px 420px), var(--page-bg-tile-size-2, 260px 260px);
+  background-position: center center, left top, right 120px top 120px;
 }
 
 /* Hide scrollbars for elements that opt-in via data-hide-scrollbar */

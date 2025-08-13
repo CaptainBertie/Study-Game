@@ -614,7 +614,6 @@ export default function App() {
   return (
     <div
       style={{
-        background: "var(--page-bg)",
         minHeight: "100vh",
         display: "flex",
         alignItems: "center",
