@@ -640,7 +640,7 @@ export default function App() {
 
           {mode === "intro" && (
             <div>
-              <p style={styles.p}>Answer all questions. You can change your selection at any time. After you press <b>Submit</b>, you’ll see your total score and a full review with the correct answers and explanations.</p>
+              <p style={styles.p}>Answer all questions. You can change your selection at any time. After you press <b>Submit</b>, you’ll see your total score and a full review with the correct answers and explanations. You can also use the keyboard: <b>Up/Down</b> to move between options, <b>Enter</b> to select and advance, and <b>Left/Right</b> to move between questions.</p>
               <div
                 onDragOver={e => e.preventDefault()}
                 onDrop={handleDrop}
@@ -653,7 +653,16 @@ export default function App() {
                   marginTop: 12
                 }}
               >
-                <div style={{ fontWeight: 600, marginBottom: 6 }}>Import questions (JSON)</div>
+                <div style={{ fontWeight: 600, marginBottom: 6, display: "flex", alignItems: "center", gap: 8 }}>
+                  <span>Import questions (JSON)</span>
+                  <span
+                    title={`JSON is a plain text format like {"key": "value"}.
+For this game, provide an array of questions with fields: prompt, choices, correctIndex (0-based), optional explanation.
+Example: [{ prompt: 'Q', choices: ['A','B'], correctIndex: 1 }].
+Tip: Ask ChatGPT — "Generate 20 MCQ questions for MMAN1130 in JSON matching this schema: [{"prompt":string,"choices":[string],"correctIndex":number,"explanation"?:string}]"`}
+                    style={{ color: "#93c5fd", border: "1px solid #93c5fd", padding: "0 6px", borderRadius: 8, fontSize: 12, cursor: "help", userSelect: "none" }}
+                  >what is a JSON?</span>
+                </div>
                 <div style={{ color: "#64748b", fontSize: 14 }}>Drag & drop a .json file here, or
                   <label style={{ color: "#2563eb", cursor: "pointer", marginLeft: 4 }}>
                     browse

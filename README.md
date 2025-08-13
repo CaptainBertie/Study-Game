@@ -20,6 +20,14 @@ npm run build
 npm run preview
 ```
 
+## Create an offline zip (no install required)
+```bash
+npm run pack:offline
+```
+This produces `mman1130-quiz-offline.zip` in the project root. Share that file. Recipients can unzip and double-click `index.html` inside the folder to play.
+
+If the OS blocks local scripts, right-click `index.html` → Open.
+
 ## Importing your own questions (JSON)
 On the Start screen, use the “Import questions (JSON)” box to drag-and-drop a `.json` file or click “browse`. If parsing succeeds you’ll see a message like “Loaded 20 questions”. Click Start Quiz to begin.
 
@@ -71,6 +79,11 @@ On the Start screen, use the “Import questions (JSON)” box to drag-and-drop 
 - If `id` is omitted, it will auto-number starting from 1.
 - If `label` is omitted, letters A, B, C, … are assigned automatically.
 - Re-importing a file replaces the current quiz set.
+
+### Keyboard navigation
+- Up/Down: move between answers
+- Enter: select focused answer and go to next question
+- Left/Right: switch questions
 
 ## Project structure
 - `src/App.tsx`: main quiz component (UI + logic, including importer)
