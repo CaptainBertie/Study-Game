@@ -611,6 +611,19 @@ export default function App() {
     };
   }, [isDragActive]);
 
+  const [showJsonHelp, setShowJsonHelp] = useState(false);
+  const [copiedPrompt, setCopiedPrompt] = useState(false);
+  const jsonPrompt = `Generate 20 MMAN1130 multiple-choice questions in JSON with this shape: [{"prompt":string,"choices":[string],"correctIndex":number,"explanation"?:string}]. Also include an HTML download link that lets me download that JSON as a file named questions.json.`;
+  const copyPrompt = async () => {
+    try {
+      await navigator.clipboard.writeText(jsonPrompt);
+      setCopiedPrompt(true);
+      window.setTimeout(() => setCopiedPrompt(false), 1500);
+    } catch (err) {
+      setCopiedPrompt(false);
+    }
+  };
+
   return (
     <div
       style={{
@@ -624,7 +637,7 @@ export default function App() {
       <div style={{ ...styles.container, width: "100%", maxWidth: 960 }}>
         <div style={{ ...styles.card, marginBottom: 16 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <h1 style={styles.h1}>MMAN1130 Study Game</h1>
+            <h1 style={styles.h1}>Study Quiz</h1>
             <div style={styles.topActions}>
               {mode === "quiz" && (
                 <button style={styles.btn} onClick={() => setMode("intro")} onMouseDown={e => e.preventDefault()}>Main Menu</button>
@@ -653,15 +666,84 @@ export default function App() {
                   marginTop: 12
                 }}
               >
-                <div style={{ fontWeight: 600, marginBottom: 6, display: "flex", alignItems: "center", gap: 8 }}>
+                <div
+                  style={{ fontWeight: 600, marginBottom: 6, display: "flex", alignItems: "center", gap: 8 }}
+                >
                   <span>Import questions (JSON)</span>
-                  <span
-                    title={`JSON is a plain text format like {"key": "value"}.
-For this game, provide an array of questions with fields: prompt, choices, correctIndex (0-based), optional explanation.
-Example: [{ prompt: 'Q', choices: ['A','B'], correctIndex: 1 }].
-Tip: Ask ChatGPT — "Generate 20 MCQ questions for MMAN1130 in JSON matching this schema: [{"prompt":string,"choices":[string],"correctIndex":number,"explanation"?:string}]"`}
-                    style={{ color: "#93c5fd", border: "1px solid #93c5fd", padding: "0 6px", borderRadius: 8, fontSize: 12, cursor: "help", userSelect: "none" }}
-                  >what is a JSON?</span>
+                  <div style={{ position: "relative", display: "inline-block" }} onMouseEnter={() => setShowJsonHelp(true)} onMouseLeave={() => setShowJsonHelp(false)}>
+                    <button
+                      onFocus={() => setShowJsonHelp(true)}
+                      style={{
+                        color: "var(--text)",
+                        background: "linear-gradient(180deg, rgba(186,230,253,0.4), rgba(221,214,254,0.4))",
+                        border: "1px solid var(--btn-border)",
+                        padding: "2px 8px",
+                        borderRadius: 8,
+                        fontSize: 12,
+                        cursor: "pointer",
+                        userSelect: "none"
+                      }}
+                    >How to Import JSON</button>
+                    {showJsonHelp && (
+                      <>
+                      {/* Invisible bridge between button and popover to keep hover */}
+                      <div style={{ position: "absolute", top: "100%", left: 0, height: 10, width: 460 }} />
+                      <div style={{
+                        position: "absolute",
+                        top: "100%",
+                        left: 0,
+                        marginTop: 4, /* small overlap/nearby to feel connected */
+                        zIndex: 50,
+                        width: 420,
+                        maxWidth: "min(92vw, 520px)",
+                        background: "var(--card-bg)",
+                        color: "var(--text)",
+                        border: "1px solid var(--btn-border)",
+                        boxShadow: "0 12px 40px rgba(2,6,23,0.2)",
+                        borderRadius: 12,
+                        padding: 12,
+                        transformOrigin: "top left"
+                      }}>
+                      <div style={{ fontWeight: 700, marginBottom: 6 }}>How to Import JSON</div>
+                      <div style={{ fontSize: 13, marginBottom: 8 }}>
+                        JSON is a basic file type that is exceptionally flexible and versatile. Use AI to generate
+                        questions based on your content using the prompt below. It is important to maintain the schema
+                        provided, but you have complete flexibility in all other areas.
+                      </div>
+                      {/* example removed per request */}
+                      <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 8 }}>
+                        <div style={{ fontSize: 12, color: "#64748b" }}>AI prompt:</div>
+                        <button
+                          onClick={copyPrompt}
+                          onMouseDown={(e) => e.preventDefault()}
+                          style={{ fontSize: 12, padding: "4px 10px", borderRadius: 8, border: "1px solid var(--btn-border)", background: "var(--btn-bg)", color: "var(--text)", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 6, userSelect: "none" }}
+                          aria-live="polite"
+                        >
+                          {copiedPrompt ? (
+                            <>
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+                              </svg>
+                              Copied
+                            </>
+                          ) : (
+                            <>
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" strokeWidth="2"/>
+                                <rect x="4" y="4" width="11" height="11" rx="2" stroke="currentColor" strokeWidth="2" opacity="0.7"/>
+                              </svg>
+                              Copy
+                            </>
+                          )}
+                        </button>
+                      </div>
+                      <div style={{ fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace", fontSize: 12, background: "#0b1220", color: "#e2e8f0", padding: 10, borderRadius: 8, overflowX: "auto", marginTop: 6 }}>
+                        {jsonPrompt}
+                      </div>
+                      </div>
+                      </>
+                    )}
+                  </div>
                 </div>
                 <div style={{ color: "#64748b", fontSize: 14 }}>Drag & drop a .json file here, or
                   <label style={{ color: "#2563eb", cursor: "pointer", marginLeft: 4 }}>
