@@ -859,8 +859,10 @@ export default function App() {
                     <div style={{ color: "#475569" }}>You still have unanswered questions (first at Q{unansweredIndex + 1}).</div>
                   <div style={{ ...styles.btnRow, marginTop: 16, userSelect: "none" as const }}>
                       <button
-                        style={styles.btn}
-                        onClick={() => { setCursor(unansweredIndex); setUnansweredIndex(null); }}
+                        style={{ ...styles.btn, pointerEvents: "none", opacity: 0.6, cursor: "not-allowed" }}
+                        tabIndex={-1}
+                        aria-disabled="true"
+                        onMouseDown={e => e.preventDefault()}
                       >
                         Go to Q{unansweredIndex + 1}
                       </button>
