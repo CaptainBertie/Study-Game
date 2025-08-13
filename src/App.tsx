@@ -449,13 +449,20 @@ export default function App() {
     if (len === 0) return;
     if (e.key === "ArrowDown") {
       e.preventDefault();
-      setFocusIdx(i => {
-        const start = (answers[cursor]?.selectedIndex ?? null) === null && i === 0 ? -1 : i;
-        return (start + 1) % len;
-      });
+      setFocusIdx(i => (i + 1) % len);
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       setFocusIdx(i => (i - 1 + len) % len);
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      if (cursor < questionBank.length - 1) {
+        goNext();
+      }
+    } else if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      if (cursor > 0) {
+        goPrev();
+      }
     } else if (e.key === "Enter") {
       e.preventDefault();
       const idx = Math.max(0, Math.min(len - 1, focusIdx));
