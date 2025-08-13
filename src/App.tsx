@@ -334,8 +334,9 @@ const styles = {
   qChip: {
     padding: "4px 8px",
     borderRadius: 999,
-    border: "1px solid #e5e7eb",
-    background: "#ffffff",
+    border: "1px solid var(--chip-border, #e5e7eb)",
+    background: "var(--chip-bg, #ffffff)",
+    color: "var(--text, #0f172a)",
     cursor: "pointer",
     fontSize: 12,
     userSelect: "none" as const,
@@ -350,7 +351,7 @@ const styles = {
   },
   sidebar: {
     width: 136,
-    borderLeft: "1px solid #eef2f7",
+    borderLeft: "1px solid var(--panel-divider, #eef2f7)",
     paddingLeft: 12,
     position: "absolute" as const,
     right: 0,

@@ -13,6 +13,7 @@
   --chip-bg: #f8fafc;
   --chip-border: #e5e7eb;
   --page-bg: linear-gradient(180deg, #f8fbff 0%, #eef2ff 100%);
+  --panel-divider: #eef2f7;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -78,5 +79,6 @@ button:focus-visible {
     --chip-bg: #0f172a;
     --chip-border: #1f2937;
     --page-bg: linear-gradient(180deg, #0b1220 0%, #0a1325 100%);
+    --panel-divider: #1f2937;
   }
 }
