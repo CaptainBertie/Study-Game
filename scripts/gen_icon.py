@@ -1,111 +1,113 @@
 #!/usr/bin/env python3
 import random
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 
-def find_font(candidates: List[str]) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
+def find_font_path(candidates: List[str]) -> Optional[str]:
     for path in candidates:
         p = Path(path)
         if p.exists():
             try:
-                return ImageFont.truetype(str(p), size=1)
+                ImageFont.truetype(str(p), size=12)
+                return str(p)
             except Exception:
                 continue
-    return ImageFont.load_default()
+    return None
 
 
-def create_cloud_icon(output_path: Path, size: int = 1024) -> None:
+def create_sq_monogram_icon(output_path: Path, size: int = 1024) -> None:
     random.seed(1130)
-    img = Image.new("RGBA", (size, size), (20, 24, 33, 255))
-    draw = ImageDraw.Draw(img, "RGBA")
+    # Base transparent canvas
+    base = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(base, "RGBA")
 
-    # Pastel palette
+    # Blue/Purple palette to match app UI
     colors: List[Tuple[int, int, int]] = [
+        (59, 130, 246),   # blue
         (99, 102, 241),   # indigo
         (168, 85, 247),   # purple
-        (236, 72, 153),   # pink
-        (234, 179, 8),    # amber
-        (34, 197, 94),    # green
+        (147, 51, 234),   # violet
         (14, 165, 233),   # sky
-        (59, 130, 246),   # blue
-        (244, 114, 182),  # fuchsia
     ]
 
-    # Draw overlapping translucent circles for a "color clouds" effect
-    for _ in range(220):
-        r = random.randint(size // 16, size // 4)
+    # Draw overlapping translucent circles for clouds
+    for _ in range(260):
+        r = random.randint(size // 18, size // 4)
         x = random.randint(-r // 2, size - 1 + r // 2)
         y = random.randint(-r // 2, size - 1 + r // 2)
         color = random.choice(colors)
-        alpha = random.randint(28, 70)
-        bbox = (x - r, y - r, x + r, y + r)
-        draw.ellipse(bbox, fill=(color[0], color[1], color[2], alpha))
+        alpha = random.randint(42, 82)
+        draw.ellipse((x - r, y - r, x + r, y + r), fill=(color[0], color[1], color[2], alpha))
 
-    img = img.filter(ImageFilter.GaussianBlur(radius=size * 0.02))
+    cloud = base.filter(ImageFilter.GaussianBlur(radius=size * 0.03))
 
-    # Add text "Study Quiz"
-    # Try common system fonts, fall back to default
+    # Rounded-square mask (Apple-style)
+    radius = int(size * 0.18)
+    mask = Image.new("L", (size, size), 0)
+    mdraw = ImageDraw.Draw(mask)
+    mdraw.rounded_rectangle((0, 0, size - 1, size - 1), radius=radius, fill=255)
+
+    # Apply mask onto a dark base to ensure edges are clean
+    bg = Image.new("RGBA", (size, size), (20, 24, 33, 255))
+    bg = Image.composite(cloud, bg, mask)
+
+    # Prepare fonts
     font_candidates = [
-        "/System/Library/Fonts/SFNS.ttf",
+        "/System/Library/Fonts/SFNSRounded.ttf",
         "/System/Library/Fonts/SFNSDisplay.ttf",
         "/Library/Fonts/Arial Bold.ttf",
-        "/Library/Fonts/Arial.ttf",
-        "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
-        "/System/Library/Fonts/Supplemental/Arial.ttf",
+        "/Library/Fonts/Arial Black.ttf",
         "/System/Library/Fonts/Supplemental/Helvetica.ttc",
     ]
-    base_font = find_font(font_candidates)
-
-    # Scale font to fit roughly within 70% width
-    text = "Study Quiz"
-    target_width = int(size * 0.74)
-    font_size = int(size * 0.16)
-
-    # Recreate font with computed size if possible
-    if isinstance(base_font, ImageFont.FreeTypeFont):
-        font = ImageFont.truetype(base_font.path, font_size)
+    font_path = find_font_path(font_candidates)
+    if font_path is None:
+        # fallback to default bitmap font
+        font_s = ImageFont.load_default()
+        font_q = ImageFont.load_default()
     else:
-        font = base_font
+        # Size letters to fill the square with overlap
+        s_size = int(size * 0.56)
+        q_size = int(size * 0.56)
+        font_s = ImageFont.truetype(font_path, s_size)
+        font_q = ImageFont.truetype(font_path, q_size)
 
-    # Adjust font size iteratively
-    for _ in range(20):
-        bbox = font.getbbox(text)
-        text_w = bbox[2] - bbox[0]
-        if text_w > target_width and isinstance(base_font, ImageFont.FreeTypeFont):
-            font_size = int(font_size * 0.92)
-            font = ImageFont.truetype(base_font.path, font_size)
-        else:
-            break
+    # Positions to mimic interlocked monogram (Padres-like)
+    s_bbox = font_s.getbbox("S")
+    q_bbox = font_q.getbbox("Q")
+    s_w, s_h = s_bbox[2] - s_bbox[0], s_bbox[3] - s_bbox[1]
+    q_w, q_h = q_bbox[2] - q_bbox[0], q_bbox[3] - q_bbox[1]
 
-    bbox = font.getbbox(text)
-    text_w, text_h = bbox[2] - bbox[0], bbox[3] - bbox[1]
-    x = (size - text_w) // 2
-    y = int(size * 0.58) - text_h // 2
+    # Offset S slightly left/up, Q slightly right/down to interlock
+    s_x = int(size * 0.18)
+    s_y = int(size * 0.18)
+    q_x = int(size * 0.34)
+    q_y = int(size * 0.30)
 
-    # Draw soft shadow
-    shadow = Image.new("RGBA", (size, size), (0, 0, 0, 0))
-    sdraw = ImageDraw.Draw(shadow)
-    for dx, dy, alpha in [
-        (0, 0, 220), (1, 1, 180), (2, 2, 120), (3, 3, 80)
-    ]:
-        sdraw.text((x + dx, y + dy), text, font=font, fill=(0, 0, 0, alpha))
-    shadow = shadow.filter(ImageFilter.GaussianBlur(radius=size * 0.01))
-    img = Image.alpha_composite(img, shadow)
+    # Shadow layer for depth
+    text_shadow = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    ts = ImageDraw.Draw(text_shadow)
+    for dx, dy, a in [(2, 2, 170), (3, 3, 120), (4, 4, 80)]:
+        ts.text((s_x + dx, s_y + dy), "S", font=font_s, fill=(0, 0, 0, a))
+        ts.text((q_x + dx, q_y + dy), "Q", font=font_q, fill=(0, 0, 0, a))
+    text_shadow = text_shadow.filter(ImageFilter.GaussianBlur(radius=size * 0.01))
+    bg = Image.alpha_composite(bg, text_shadow)
 
-    # Draw main text
-    draw = ImageDraw.Draw(img, "RGBA")
-    draw.text((x, y), text, font=font, fill=(255, 255, 255, 245))
+    # Draw letter strokes (thin outline) + white fill
+    stroke = int(max(2, size * 0.01))
+    draw_fg = ImageDraw.Draw(bg, "RGBA")
+    draw_fg.text((s_x, s_y), "S", font=font_s, fill=(255, 255, 255, 255), stroke_width=stroke, stroke_fill=(0, 0, 0, 110))
+    draw_fg.text((q_x, q_y), "Q", font=font_q, fill=(255, 255, 255, 255), stroke_width=stroke, stroke_fill=(0, 0, 0, 110))
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    img.save(output_path)
+    bg.save(output_path)
 
 
 if __name__ == "__main__":
     root = Path(__file__).resolve().parents[1]
     out = root / "src-tauri" / "icons" / "icon-1024.png"
-    create_cloud_icon(out, size=1024)
+    create_sq_monogram_icon(out, size=1024)
     print(f"Wrote {out}")
 
 

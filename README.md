@@ -1,17 +1,14 @@
-# MMAN1130 Study Game (React + TypeScript + Vite)
+# Study Quiz (MMAN1130)
 
-A lightweight quiz app you can run locally. Supports importing your own questions from a JSON file.
+Get the app first.
 
-## Direct download
+## Application downloads (recommended)
+- macOS and Windows installers: https://github.com/CaptainBertie/mman1130-quiz/releases/latest
 
-[Download the offline ZIP](./mman1130-quiz-offline.zip)
+## Offline web zip (no install)
+- [Download the offline ZIP](./mman1130-quiz-offline.zip)
 
-## Desktop app downloads
-
-Grab the latest installers for Windows and macOS from the Releases page:
-- https://github.com/CaptainBertie/mman1130-quiz/releases/latest
-
-## Prerequisites
+## Developer prerequisites
 - Node.js 18+ (20+ recommended)
 - npm (comes with Node)
 
