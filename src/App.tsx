@@ -466,7 +466,7 @@ export default function App() {
     } else if (e.key === "Enter") {
       e.preventDefault();
       const idx = Math.max(0, Math.min(len - 1, focusIdx));
-      selectChoice(idx);
+      setChoiceFromKeyboard(idx);
       if (cursor < questionBank.length - 1) {
         goNext();
       } else {
@@ -486,6 +486,13 @@ export default function App() {
     const currentSel = next[cursor]?.selectedIndex ?? null;
     // Toggle selection: clicking again deselects
     next[cursor] = { selectedIndex: currentSel === idx ? null : idx };
+    setAnswers(next);
+  };
+
+  // Keyboard selection should not toggle off; it should always set the value
+  const setChoiceFromKeyboard = (idx: number) => {
+    const next = answers.slice();
+    next[cursor] = { selectedIndex: idx };
     setAnswers(next);
   };
 
@@ -708,7 +715,7 @@ export default function App() {
                         const isAnswered = sel !== null;
                         const base = { textAlign: "center" as const };
                         const chipStyle = isActive
-                          ? { ...styles.qChip, ...base, border: "2px solid #0f172a", fontWeight: 700, boxShadow: "0 0 0 2px var(--chip-active-outline, #ffffff)" }
+                          ? { ...styles.qChip, ...base, border: "2px solid var(--chip-active-border, #0f172a)", color: "var(--chip-active-text, #0f172a)", fontWeight: 700, boxShadow: "inset 0 0 0 var(--chip-active-outline-width, 2px) var(--chip-active-outline, #ffffff)" }
                           : isAnswered
                           ? { ...styles.qChip, ...base, border: "1px solid #93c5fd", background: "linear-gradient(90deg, rgba(186,230,253,0.55) 0%, rgba(221,214,254,0.55) 100%)" }
                           : { ...styles.qChip, ...base };
@@ -727,7 +734,7 @@ export default function App() {
                         const isAnswered = sel !== null;
                         const base = { textAlign: "center" as const };
                         const chipStyle = isActive
-                          ? { ...styles.qChip, ...base, border: "2px solid #0f172a", fontWeight: 700, boxShadow: "0 0 0 2px var(--chip-active-outline, #ffffff)" }
+                          ? { ...styles.qChip, ...base, border: "2px solid var(--chip-active-border, #0f172a)", color: "var(--chip-active-text, #0f172a)", fontWeight: 700, boxShadow: "inset 0 0 0 var(--chip-active-outline-width, 2px) var(--chip-active-outline, #ffffff)" }
                           : isAnswered
                           ? { ...styles.qChip, ...base, border: "1px solid #93c5fd", background: "linear-gradient(90deg, rgba(186,230,253,0.55) 0%, rgba(221,214,254,0.55) 100%)" }
                           : { ...styles.qChip, ...base };

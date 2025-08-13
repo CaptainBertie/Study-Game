@@ -15,6 +15,9 @@
   --page-bg: linear-gradient(180deg, #f8fbff 0%, #eef2ff 100%);
   --panel-divider: #eef2f7;
   --chip-active-outline: #ffffff;
+  --chip-active-border: #0f172a;
+  --chip-active-text: #0f172a;
+  --chip-active-outline-width: 2px;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -79,8 +82,16 @@ button:focus-visible {
     --btn-border: #1f2937; /* slate-800 */
     --chip-bg: #0f172a;
     --chip-border: #1f2937;
-    --page-bg: linear-gradient(180deg, #0b1220 0%, #0a1325 100%);
+    /* richer cloudy gradients for dark mode */
+    --page-bg: radial-gradient(1000px 500px at 20% 10%, rgba(186,230,253,0.22), rgba(186,230,253,0) 60%),
+               radial-gradient(920px 460px at 80% 18%, rgba(221,214,254,0.22), rgba(221,214,254,0) 60%),
+               radial-gradient(860px 420px at 15% 72%, rgba(125,211,252,0.18), rgba(125,211,252,0) 60%),
+               radial-gradient(820px 410px at 85% 78%, rgba(196,181,253,0.18), rgba(196,181,253,0) 60%),
+               linear-gradient(180deg, #0b1220 0%, #0a1325 100%);
     --panel-divider: #1f2937;
-    --chip-active-outline: #e5e7eb; /* lighter in dark mode */
+    --chip-active-outline: #ffffff; /* white outline */
+    --chip-active-border: #ffffff;
+    --chip-active-text: #ffffff;
+    --chip-active-outline-width: 0.5px; /* half thickness in dark mode */
   }
 }
