@@ -9,6 +9,7 @@
     "pack:offline": "npm run build && cd dist && printf 'Open index.html in this folder to play.\n' > README-OFFLINE.txt && zip -r ../mman1130-quiz-offline.zip .",
     "lint": "eslint .",
     "preview": "vite preview",
+    "tauri": "tauri",
     "tauri:dev": "tauri dev",
     "tauri:build": "tauri build",
     "icon:gen": "python3 scripts/gen_icon.py",
