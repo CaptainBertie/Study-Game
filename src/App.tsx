@@ -646,8 +646,9 @@ export default function App() {
                 onDragOver={e => e.preventDefault()}
                 onDrop={handleDrop}
                 style={{
-                  border: "2px dashed #93c5fd",
-                  background: "linear-gradient(180deg, #f8fbff 0%, #f0f9ff 100%)",
+                  border: "2px dashed var(--drop-border)",
+                  background: "var(--drop-bg)",
+                  color: "var(--drop-text)",
                   padding: 16,
                   borderRadius: 12,
                   marginTop: 12
@@ -817,8 +818,9 @@ export default function App() {
                             : isMine && !isRight
                             ? { border: "2px solid #fecaca", background: "radial-gradient(600px 300px at 10% 20%, rgba(254,226,226,0.65), rgba(254,226,226,0) 60%), linear-gradient(180deg, #ffffff 0%, #fef2f2 100%)" }
                             : {};
+                          const textColor = isRight ? "#166534" : (isMine && !isRight) ? "#991b1b" : undefined;
                           return (
-                            <div key={idx} style={{ ...styles.choice, cursor: "default", userSelect: "none", ...chipStyle }}>
+                            <div key={idx} style={{ ...styles.choice, cursor: "default", userSelect: "none", ...(textColor ? { color: textColor } : {}), ...chipStyle }}>
                               <strong style={{ marginRight: 8 }}>{c.label}.</strong> {c.text}
                               {isRight && <span style={{ marginLeft: 8, fontSize: 12, color: "#166534" }}>(correct)</span>}
                               {isMine && !isRight && <span style={{ marginLeft: 8, fontSize: 12, color: "#991b1b" }}>(your answer)</span>}
@@ -876,8 +878,9 @@ export default function App() {
                                   "linear-gradient(180deg, #ffffff 0%, #fef2f2 100%)"
                               }
                             : {};
+                          const textColor = isRight ? "#166534" : (isMine && !isRight) ? "#991b1b" : undefined;
                           return (
-                            <div key={idx} style={{ ...styles.choice, cursor: "default", userSelect: "none", ...chipStyle }}>
+                            <div key={idx} style={{ ...styles.choice, cursor: "default", userSelect: "none", ...(textColor ? { color: textColor } : {}), ...chipStyle }}>
                               <strong style={{ marginRight: 8 }}>{c.label}.</strong> {c.text}
                               {isRight && <span style={{ marginLeft: 8, fontSize: 12, color: "#166534" }}>(correct)</span>}
                               {isMine && !isRight && <span style={{ marginLeft: 8, fontSize: 12, color: "#991b1b" }}>(your answer)</span>}

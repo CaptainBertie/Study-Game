@@ -12,12 +12,38 @@
   --btn-border: #e5e7eb;
   --chip-bg: #f8fafc;
   --chip-border: #e5e7eb;
-  --page-bg: linear-gradient(180deg, #f8fbff 0%, #eef2ff 100%);
+  /* Light mode: richer cloudy gradients */
+  --page-bg: 
+    radial-gradient(1200px 600px at 18% 8%, rgba(186,230,253,0.30), rgba(186,230,253,0) 60%),
+    radial-gradient(1100px 560px at 82% 12%, rgba(221,214,254,0.30), rgba(221,214,254,0) 60%),
+    radial-gradient(900px 520px at 12% 78%, rgba(125,211,252,0.22), rgba(125,211,252,0) 60%),
+    radial-gradient(880px 500px at 88% 82%, rgba(196,181,253,0.22), rgba(196,181,253,0) 60%),
+    radial-gradient(760px 420px at 30% 30%, rgba(186,230,253,0.18), rgba(186,230,253,0) 60%),
+    radial-gradient(760px 420px at 70% 28%, rgba(221,214,254,0.18), rgba(221,214,254,0) 60%),
+    radial-gradient(720px 380px at 26% 60%, rgba(125,211,252,0.16), rgba(125,211,252,0) 60%),
+    radial-gradient(700px 360px at 74% 62%, rgba(196,181,253,0.16), rgba(196,181,253,0) 60%),
+    radial-gradient(640px 320px at 12% 45%, rgba(186,230,253,0.14), rgba(186,230,253,0) 60%),
+    radial-gradient(640px 320px at 88% 48%, rgba(221,214,254,0.14), rgba(221,214,254,0) 60%),
+    radial-gradient(580px 300px at 42% 84%, rgba(125,211,252,0.12), rgba(125,211,252,0) 60%),
+    radial-gradient(580px 300px at 58% 86%, rgba(196,181,253,0.12), rgba(196,181,253,0) 60%),
+    linear-gradient(180deg, #f8fbff 0%, #eef2ff 100%);
   --panel-divider: #eef2f7;
   --chip-active-outline: #ffffff;
   --chip-active-border: #0f172a;
   --chip-active-text: #0f172a;
   --chip-active-outline-width: 2px;
+  /* Drag & drop import box theming */
+  --drop-border: #93c5fd; /* blue-300 */
+  --drop-bg: linear-gradient(180deg, #f8fbff 0%, #f0f9ff 100%);
+  --drop-text: #0f172a;
+
+  /* Repeating cloud tile (light) to keep density on long pages */
+  --page-bg-tile:
+    radial-gradient( ellipse at 20% 25%, rgba(186,230,253,0.18) 0 40%, transparent 41%),
+    radial-gradient( ellipse at 80% 70%, rgba(221,214,254,0.18) 0 40%, transparent 41%),
+    radial-gradient( ellipse at 70% 25%, rgba(125,211,252,0.14) 0 34%, transparent 35%),
+    radial-gradient( ellipse at 30% 80%, rgba(196,181,253,0.14) 0 34%, transparent 35%);
+  --page-bg-tile-size: 640px 640px;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -38,6 +64,15 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+}
+
+/* Ensure background clouds persist across long pages like Review */
+html, body {
+  /* Layer hero clouds over a repeating tile for consistent density */
+  background-image: var(--page-bg), var(--page-bg-tile);
+  background-attachment: fixed;
+  background-repeat: no-repeat, repeat;
+  background-size: auto, var(--page-bg-tile-size, 640px 640px);
 }
 
 /* Hide scrollbars for elements that opt-in via data-hide-scrollbar */
@@ -82,16 +117,37 @@ button:focus-visible {
     --btn-border: #1f2937; /* slate-800 */
     --chip-bg: #0f172a;
     --chip-border: #1f2937;
-    /* richer cloudy gradients for dark mode */
-    --page-bg: radial-gradient(1000px 500px at 20% 10%, rgba(186,230,253,0.22), rgba(186,230,253,0) 60%),
-               radial-gradient(920px 460px at 80% 18%, rgba(221,214,254,0.22), rgba(221,214,254,0) 60%),
-               radial-gradient(860px 420px at 15% 72%, rgba(125,211,252,0.18), rgba(125,211,252,0) 60%),
-               radial-gradient(820px 410px at 85% 78%, rgba(196,181,253,0.18), rgba(196,181,253,0) 60%),
-               linear-gradient(180deg, #0b1220 0%, #0a1325 100%);
+    /* Dark mode: triple cloud layers */
+    --page-bg: 
+      radial-gradient(1200px 560px at 18% 8%, rgba(186,230,253,0.28), rgba(186,230,253,0) 60%),
+      radial-gradient(1100px 520px at 82% 12%, rgba(221,214,254,0.28), rgba(221,214,254,0) 60%),
+      radial-gradient(980px 500px at 15% 72%, rgba(125,211,252,0.22), rgba(125,211,252,0) 60%),
+      radial-gradient(960px 480px at 85% 78%, rgba(196,181,253,0.22), rgba(196,181,253,0) 60%),
+      radial-gradient(840px 420px at 30% 30%, rgba(186,230,253,0.18), rgba(186,230,253,0) 60%),
+      radial-gradient(840px 420px at 70% 28%, rgba(221,214,254,0.18), rgba(221,214,254,0) 60%),
+      radial-gradient(800px 400px at 26% 60%, rgba(125,211,252,0.16), rgba(125,211,252,0) 60%),
+      radial-gradient(800px 400px at 74% 62%, rgba(196,181,253,0.16), rgba(196,181,253,0) 60%),
+      radial-gradient(720px 340px at 12% 45%, rgba(186,230,253,0.14), rgba(186,230,253,0) 60%),
+      radial-gradient(720px 340px at 88% 48%, rgba(221,214,254,0.14), rgba(221,214,254,0) 60%),
+      radial-gradient(660px 320px at 42% 84%, rgba(125,211,252,0.12), rgba(125,211,252,0) 60%),
+      radial-gradient(660px 320px at 58% 86%, rgba(196,181,253,0.12), rgba(196,181,253,0) 60%),
+      linear-gradient(180deg, #0b1220 0%, #0a1325 100%);
     --panel-divider: #1f2937;
     --chip-active-outline: #ffffff; /* white outline */
     --chip-active-border: #ffffff;
     --chip-active-text: #ffffff;
     --chip-active-outline-width: 0.5px; /* half thickness in dark mode */
+    /* Drag & drop (dark) */
+    --drop-border: #60a5fa; /* blue-400 */
+    --drop-bg: linear-gradient(180deg, rgba(15,23,42,0.9) 0%, rgba(15,23,42,0.86) 100%);
+    --drop-text: #e2e8f0;
+
+    /* Repeating cloud tile (dark) */
+    --page-bg-tile:
+      radial-gradient( ellipse at 20% 25%, rgba(186,230,253,0.20) 0 40%, transparent 41%),
+      radial-gradient( ellipse at 80% 70%, rgba(221,214,254,0.20) 0 40%, transparent 41%),
+      radial-gradient( ellipse at 70% 25%, rgba(125,211,252,0.16) 0 34%, transparent 35%),
+      radial-gradient( ellipse at 30% 80%, rgba(196,181,253,0.16) 0 34%, transparent 35%);
+    --page-bg-tile-size: 640px 640px;
   }
 }
