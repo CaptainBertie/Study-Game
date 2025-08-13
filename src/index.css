@@ -4,8 +4,15 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /* App-level CSS variables so inline styles can read them */
+  --text: #0f172a;
+  --muted: #475569;
+  --card-bg: #ffffff;
+  --btn-bg: #f8fafc;
+  --btn-border: #e5e7eb;
+  --chip-bg: #f8fafc;
+  --chip-border: #e5e7eb;
+  --page-bg: linear-gradient(180deg, #f8fbff 0%, #eef2ff 100%);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -61,15 +68,15 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
+    --text: #e2e8f0; /* slate-200 */
+    --muted: #cbd5e1; /* slate-300 */
+    --card-bg: #0b1220; /* deep slate */
+    --btn-bg: #0f172a; /* slate-900 */
+    --btn-border: #1f2937; /* slate-800 */
+    --chip-bg: #0f172a;
+    --chip-border: #1f2937;
+    --page-bg: linear-gradient(180deg, #0b1220 0%, #0a1325 100%);
   }
 }

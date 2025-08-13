@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import type React from "react";
 import type { DragEvent, ChangeEvent } from "react";
 
 // Standalone, dependency‑free React mini‑game that runs in ChatGPT's canvas preview.
@@ -290,7 +291,7 @@ const styles = {
     alignItems: "center"
   },
   card: {
-    background: "#fff",
+    background: "var(--card-bg, #fff)",
     border: "1px solid #e5e7eb",
     borderRadius: 16,
     padding: 20,
@@ -299,20 +300,20 @@ const styles = {
     margin: "0 auto",
     boxSizing: "border-box" as const
   },
-  h1: { fontSize: 24, fontWeight: 800, marginBottom: 12 },
-  h2: { fontSize: 18, fontWeight: 700, marginBottom: 8 },
-  p: { color: "#475569" },
+  h1: { fontSize: 24, fontWeight: 800, marginBottom: 12, color: "var(--text, #0f172a)" },
+  h2: { fontSize: 18, fontWeight: 700, marginBottom: 8, color: "var(--text, #0f172a)" },
+  p: { color: "var(--muted, #475569)" },
   prompt: { fontSize: 18, lineHeight: 1.5, marginTop: 8, minHeight: 81, display: "flex", alignItems: "center" },
   btnRow: { display: "flex", gap: 8, flexWrap: "wrap" as const, alignItems: "center", marginTop: 16 },
-  btn: { padding: "10px 14px", borderRadius: 12, border: "2px solid #e5e7eb", background: "#f8fafc", cursor: "pointer", boxSizing: "border-box" as const, userSelect: "none" as const },
+  btn: { padding: "10px 14px", borderRadius: 12, border: "2px solid var(--btn-border, #e5e7eb)", background: "var(--btn-bg, #f8fafc)", color: "var(--text, #0f172a)", cursor: "pointer", boxSizing: "border-box" as const, userSelect: "none" as const },
   btnPrimary: { padding: "10px 14px", borderRadius: 12, border: "1px solid #3b82f6", background: "#3b82f6", color: "white", cursor: "pointer" },
   choice: {
     textAlign: "left" as const,
     padding: "10px 12px",
     borderRadius: 12,
-    border: "2px solid #e5e7eb",
-    borderColor: "#e5e7eb",
-    background: "#f8fafc",
+    border: "2px solid var(--chip-border, #e5e7eb)",
+    borderColor: "var(--chip-border, #e5e7eb)",
+    background: "var(--chip-bg, #f8fafc)",
     cursor: "pointer",
     userSelect: "none" as const,
     outline: "none",
@@ -327,6 +328,7 @@ const styles = {
   },
   pill: { fontSize: 12, padding: "2px 8px", borderRadius: 999, display: "inline-block" },
   topActions: { display: "flex", gap: 8 },
+  choiceFocused: { borderColor: "#cbd5e1", boxShadow: "0 0 0 2px rgba(148,163,184,0.25) inset" },
   // Quiz navigation chips (sidebar layout)
   navRow: { display: "flex", flexWrap: "wrap" as const, gap: 6, marginTop: 12 },
   qChip: {
@@ -413,6 +415,8 @@ export default function App() {
   const [isDragActive, setIsDragActive] = useState(false);
   const dragDepthRef = useRef(0);
   const [unansweredIndex, setUnansweredIndex] = useState<number | null>(null);
+  const [focusIdx, setFocusIdx] = useState<number>(0);
+  const quizKeyRef = useRef<HTMLDivElement>(null);
 
   const current = questionBank[cursor];
   const answeredCount = answers.filter(a => a.selectedIndex !== null).length;
@@ -426,6 +430,42 @@ export default function App() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     } catch {}
   }, [mode, questionBank, cursor, answers]);
+
+  // Setup keyboard focus when entering quiz or changing question
+  useEffect(() => {
+    if (mode === "quiz") {
+      const existing = answers[cursor]?.selectedIndex;
+      setFocusIdx(existing === null || existing === undefined ? 0 : existing);
+      requestAnimationFrame(() => {
+        quizKeyRef.current?.focus();
+      });
+    }
+  }, [mode, cursor]);
+
+  const handleQuizKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (mode !== "quiz") return;
+    const len = questionBank[cursor]?.choices?.length ?? 0;
+    if (len === 0) return;
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setFocusIdx(i => {
+        const start = (answers[cursor]?.selectedIndex ?? null) === null && i === 0 ? -1 : i;
+        return (start + 1) % len;
+      });
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setFocusIdx(i => (i - 1 + len) % len);
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      const idx = Math.max(0, Math.min(len - 1, focusIdx));
+      selectChoice(idx);
+      if (cursor < questionBank.length - 1) {
+        goNext();
+      } else {
+        submitQuiz();
+      }
+    }
+  };
 
   const startQuiz = () => {
     setAnswers(questionBank.map(() => ({ selectedIndex: null })));
@@ -559,10 +599,7 @@ export default function App() {
   return (
     <div
       style={{
-        background:
-          "radial-gradient(800px 400px at 20% 10%, rgba(186,230,253,0.6), rgba(186,230,253,0) 60%), " +
-          "radial-gradient(800px 400px at 80% 20%, rgba(221,214,254,0.6), rgba(221,214,254,0) 60%), " +
-          "linear-gradient(180deg, #f8fbff 0%, #eef2ff 100%)",
+        background: "var(--page-bg)",
         minHeight: "100vh",
         display: "flex",
         alignItems: "center",
@@ -620,7 +657,7 @@ export default function App() {
           )}
 
           {mode === "quiz" && (
-            <div>
+            <div ref={quizKeyRef} tabIndex={0} onKeyDown={handleQuizKeyDown} style={{ outline: "none" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <h2 style={styles.h2}>Question {current.id} of {questionBank.length}</h2>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -634,8 +671,9 @@ export default function App() {
                     {current.choices.map((c, idx) => {
                       const sel = answers[cursor].selectedIndex;
                       const style = sel === idx ? { ...styles.choice, ...styles.choiceSelected } : styles.choice;
+                      const finalStyle = idx === focusIdx ? { ...style, ...styles.choiceFocused } : style;
                       return (
-                        <button key={idx} style={style} onClick={() => selectChoice(idx)} onMouseDown={e => e.preventDefault()}>
+                        <button key={idx} style={finalStyle} onClick={() => selectChoice(idx)} onMouseDown={e => e.preventDefault()}>
                           <strong style={{ marginRight: 8 }}>{c.label}.</strong> {c.text}
                         </button>
                       );
