@@ -10,7 +10,9 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "tauri:dev": "tauri dev",
-    "tauri:build": "tauri build"
+    "tauri:build": "tauri build",
+    "icon:gen": "python3 scripts/gen_icon.py",
+    "icon:apply": "npm run icon:gen && tauri icon src-tauri/icons/icon-1024.png"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.7.0",
