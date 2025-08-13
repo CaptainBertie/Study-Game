@@ -38,18 +38,19 @@
   --drop-text: #0f172a;
 
   /* Repeating cloud tiles (light) to keep density on long pages */
+  /* Seamless cloudy tiles (light): clouds extend beyond tile edges to eliminate seams */
   --page-bg-tile-1:
-    radial-gradient( ellipse at 20% 25%, rgba(186,230,253,0.22) 0 40%, transparent 41%),
-    radial-gradient( ellipse at 80% 70%, rgba(221,214,254,0.22) 0 40%, transparent 41%),
-    radial-gradient( ellipse at 70% 25%, rgba(125,211,252,0.18) 0 34%, transparent 35%),
-    radial-gradient( ellipse at 30% 80%, rgba(196,181,253,0.18) 0 34%, transparent 35%);
-  --page-bg-tile-size-1: 420px 420px;
+    radial-gradient( ellipse 60% 40% at -10% 20%, rgba(186,230,253,0.20) 0 60%, transparent 61%),
+    radial-gradient( ellipse 60% 40% at 110% 70%, rgba(221,214,254,0.20) 0 60%, transparent 61%),
+    radial-gradient( ellipse 50% 35% at 50% -10%, rgba(125,211,252,0.14) 0 55%, transparent 56%),
+    radial-gradient( ellipse 50% 35% at 40% 110%, rgba(196,181,253,0.14) 0 55%, transparent 56%);
+  --page-bg-tile-size-1: 760px 760px;
   --page-bg-tile-2:
-    radial-gradient( ellipse at 30% 30%, rgba(186,230,253,0.16) 0 36%, transparent 37%),
-    radial-gradient( ellipse at 70% 65%, rgba(221,214,254,0.16) 0 36%, transparent 37%),
-    radial-gradient( ellipse at 65% 30%, rgba(125,211,252,0.14) 0 28%, transparent 29%),
-    radial-gradient( ellipse at 35% 75%, rgba(196,181,253,0.14) 0 28%, transparent 29%);
-  --page-bg-tile-size-2: 260px 260px;
+    radial-gradient( ellipse 45% 32% at -8% 30%, rgba(186,230,253,0.12) 0 60%, transparent 61%),
+    radial-gradient( ellipse 45% 32% at 108% 65%, rgba(221,214,254,0.12) 0 60%, transparent 61%),
+    radial-gradient( ellipse 38% 28% at 60% -6%, rgba(125,211,252,0.10) 0 55%, transparent 56%),
+    radial-gradient( ellipse 38% 28% at 30% 106%, rgba(196,181,253,0.10) 0 55%, transparent 56%);
+  --page-bg-tile-size-2: 520px 520px;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -78,8 +79,8 @@ html, body {
   background-image: var(--page-bg), var(--page-bg-tile-1), var(--page-bg-tile-2);
   background-attachment: fixed, fixed, fixed;
   background-repeat: no-repeat, repeat, repeat;
-  background-size: cover, var(--page-bg-tile-size-1, 420px 420px), var(--page-bg-tile-size-2, 260px 260px);
-  background-position: center center, left top, right 120px top 120px;
+  background-size: cover, var(--page-bg-tile-size-1, 760px 760px), var(--page-bg-tile-size-2, 520px 520px);
+  background-position: center center, 0 0, 120px 120px;
 }
 
 /* Hide scrollbars for elements that opt-in via data-hide-scrollbar */
@@ -149,18 +150,18 @@ button:focus-visible {
     --drop-bg: linear-gradient(180deg, rgba(15,23,42,0.9) 0%, rgba(15,23,42,0.86) 100%);
     --drop-text: #e2e8f0;
 
-    /* Repeating cloud tiles (dark) tighter density */
+    /* Seamless cloudy tiles (dark) */
     --page-bg-tile-1:
-      radial-gradient( ellipse at 20% 25%, rgba(186,230,253,0.26) 0 40%, transparent 41%),
-      radial-gradient( ellipse at 80% 70%, rgba(221,214,254,0.26) 0 40%, transparent 41%),
-      radial-gradient( ellipse at 70% 25%, rgba(125,211,252,0.22) 0 34%, transparent 35%),
-      radial-gradient( ellipse at 30% 80%, rgba(196,181,253,0.22) 0 34%, transparent 35%);
-    --page-bg-tile-size-1: 420px 420px;
+      radial-gradient( ellipse 60% 40% at -10% 20%, rgba(186,230,253,0.22) 0 60%, transparent 61%),
+      radial-gradient( ellipse 60% 40% at 110% 70%, rgba(221,214,254,0.22) 0 60%, transparent 61%),
+      radial-gradient( ellipse 50% 35% at 50% -10%, rgba(125,211,252,0.18) 0 55%, transparent 56%),
+      radial-gradient( ellipse 50% 35% at 40% 110%, rgba(196,181,253,0.18) 0 55%, transparent 56%);
+    --page-bg-tile-size-1: 760px 760px;
     --page-bg-tile-2:
-      radial-gradient( ellipse at 30% 30%, rgba(186,230,253,0.20) 0 36%, transparent 37%),
-      radial-gradient( ellipse at 70% 65%, rgba(221,214,254,0.20) 0 36%, transparent 37%),
-      radial-gradient( ellipse at 65% 30%, rgba(125,211,252,0.18) 0 28%, transparent 29%),
-      radial-gradient( ellipse at 35% 75%, rgba(196,181,253,0.18) 0 28%, transparent 29%);
-    --page-bg-tile-size-2: 260px 260px;
+      radial-gradient( ellipse 45% 32% at -8% 30%, rgba(186,230,253,0.14) 0 60%, transparent 61%),
+      radial-gradient( ellipse 45% 32% at 108% 65%, rgba(221,214,254,0.14) 0 60%, transparent 61%),
+      radial-gradient( ellipse 38% 28% at 60% -6%, rgba(125,211,252,0.12) 0 55%, transparent 56%),
+      radial-gradient( ellipse 38% 28% at 30% 106%, rgba(196,181,253,0.12) 0 55%, transparent 56%);
+    --page-bg-tile-size-2: 520px 520px;
   }
 }
