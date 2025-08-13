@@ -75,12 +75,12 @@ body {
 
 /* Ensure background clouds persist across long pages like Review */
 html, body {
-  /* Layer hero clouds over two staggered repeating tiles for consistent density */
-  background-image: var(--page-bg), var(--page-bg-tile-1), var(--page-bg-tile-2);
-  background-attachment: fixed, fixed, fixed;
-  background-repeat: no-repeat, repeat, repeat;
-  background-size: cover, var(--page-bg-tile-size-1, 760px 760px), var(--page-bg-tile-size-2, 520px 520px);
-  background-position: center center, 0 0, 120px 120px;
+  /* Single cloudy background, locked while scrolling */
+  background-image: var(--page-bg);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
 }
 
 /* Hide scrollbars for elements that opt-in via data-hide-scrollbar */
