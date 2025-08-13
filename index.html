@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MMAN1130 Study Game</title>
+    <style>
+      @keyframes dropGlow {
+        0% { box-shadow: 0 20px 60px rgba(2,6,23,0.20), 0 0 0 0 rgba(147,197,253,0.55); }
+        60% { box-shadow: 0 20px 60px rgba(2,6,23,0.28), 0 0 0 16px rgba(147,197,253,0); }
+        100% { box-shadow: 0 20px 60px rgba(2,6,23,0.20), 0 0 0 0 rgba(147,197,253,0); }
+      }
+      @keyframes dropPulseIn {
+        0% { transform: translate(-50%, -50%) scale(3); opacity: 0.8; }
+        50% { transform: translate(-50%, -50%) scale(1); opacity: 0.35; }
+        100% { transform: translate(-50%, -50%) scale(3); opacity: 0.8; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
