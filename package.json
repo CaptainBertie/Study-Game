@@ -6,14 +6,15 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "pack:offline": "npm run build && cd dist && printf 'Open index.html in this folder to play.\n' > README-OFFLINE.txt && zip -r ../mman1130-quiz-offline.zip .",
+    "pack:offline": "npm run build && cd dist && printf 'Open index.html in this folder to play.\n' > README-OFFLINE.txt && zip -r ../Study-Quiz-offline.zip .",
     "lint": "eslint .",
     "preview": "vite preview",
     "tauri": "tauri",
     "tauri:dev": "tauri dev",
     "tauri:build": "tauri build",
     "icon:gen": "python3 scripts/gen_icon.py",
-    "icon:apply": "npm run icon:gen && tauri icon src-tauri/icons/icon-1024.png"
+    "icon:apply": "npm run icon:gen && tauri icon src-tauri/icons/icon-1024.png",
+    "icon:use": "tauri icon src-tauri/icons/custom.png"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.7.0",

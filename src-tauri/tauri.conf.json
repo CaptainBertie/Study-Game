@@ -1,8 +1,8 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "MMAN1130 Quiz",
+  "productName": "Study Quiz",
   "version": "0.1.0",
-  "identifier": "com.mman1130.quiz",
+  "identifier": "com.study.quiz",
   "build": {
     "frontendDist": "../dist",
     "devUrl": "http://localhost:5173",
@@ -12,10 +12,11 @@
   "app": {
     "windows": [
       {
-          "title": "MMAN1130 Quiz",
+          "title": "Study Quiz",
           "width": 1024,
           "height": 700,
         "resizable": true,
+        "dragDropEnabled": false,
         "fullscreen": false
       }
     ],

@@ -19,46 +19,15 @@ def find_font_path(candidates: List[str]) -> Optional[str]:
 
 def create_sq_monogram_icon(output_path: Path, size: int = 1024) -> None:
     random.seed(1130)
-    # Base transparent canvas
-    base = Image.new("RGBA", (size, size), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(base, "RGBA")
-
-    # Blue/Purple palette to match app UI
-    colors: List[Tuple[int, int, int]] = [
-        (59, 130, 246),   # blue
-        (99, 102, 241),   # indigo
-        (168, 85, 247),   # purple
-        (147, 51, 234),   # violet
-        (14, 165, 233),   # sky
-    ]
-
-    # Draw overlapping translucent circles for clouds
-    for _ in range(260):
-        r = random.randint(size // 18, size // 4)
-        x = random.randint(-r // 2, size - 1 + r // 2)
-        y = random.randint(-r // 2, size - 1 + r // 2)
-        color = random.choice(colors)
-        alpha = random.randint(42, 82)
-        draw.ellipse((x - r, y - r, x + r, y + r), fill=(color[0], color[1], color[2], alpha))
-
-    cloud = base.filter(ImageFilter.GaussianBlur(radius=size * 0.03))
-
-    # Rounded-square mask (Apple-style)
-    radius = int(size * 0.18)
-    mask = Image.new("L", (size, size), 0)
-    mdraw = ImageDraw.Draw(mask)
-    mdraw.rounded_rectangle((0, 0, size - 1, size - 1), radius=radius, fill=255)
-
-    # Apply mask onto a dark base to ensure edges are clean
-    bg = Image.new("RGBA", (size, size), (20, 24, 33, 255))
-    bg = Image.composite(cloud, bg, mask)
+    # Transparent canvas only (no background)
+    bg = Image.new("RGBA", (size, size), (0, 0, 0, 0))
 
     # Prepare fonts
     font_candidates = [
         "/System/Library/Fonts/SFNSRounded.ttf",
         "/System/Library/Fonts/SFNSDisplay.ttf",
-        "/Library/Fonts/Arial Bold.ttf",
         "/Library/Fonts/Arial Black.ttf",
+        "/Library/Fonts/Arial Bold.ttf",
         "/System/Library/Fonts/Supplemental/Helvetica.ttc",
     ]
     font_path = find_font_path(font_candidates)
@@ -67,11 +36,30 @@ def create_sq_monogram_icon(output_path: Path, size: int = 1024) -> None:
         font_s = ImageFont.load_default()
         font_q = ImageFont.load_default()
     else:
-        # Size letters to fill the square with overlap
-        s_size = int(size * 0.56)
-        q_size = int(size * 0.56)
-        font_s = ImageFont.truetype(font_path, s_size)
-        font_q = ImageFont.truetype(font_path, q_size)
+        # Start with large sizes and iteratively fit inside the canvas
+        scale = 0.8
+        margin = int(size * 0.06)
+        while True:
+            s_size = max(10, int(size * scale))
+            q_size = max(10, int(size * scale))
+            font_s = ImageFont.truetype(font_path, s_size)
+            font_q = ImageFont.truetype(font_path, q_size)
+            # Measure with intended offsets (Padres-like)
+            s_bbox = font_s.getbbox("S")
+            q_bbox = font_q.getbbox("Q")
+            s_w, s_h = s_bbox[2] - s_bbox[0], s_bbox[3] - s_bbox[1]
+            q_w, q_h = q_bbox[2] - q_bbox[0], q_bbox[3] - q_bbox[1]
+            s_x = (size - s_w) // 2 - int(size * 0.08)
+            s_y = (size - s_h) // 2 - int(size * 0.06)
+            q_x = (size - q_w) // 2 + int(size * 0.08)
+            q_y = (size - q_h) // 2 + int(size * 0.06)
+            left = min(s_x, q_x)
+            top = min(s_y, q_y)
+            right = max(s_x + s_w, q_x + q_w)
+            bottom = max(s_y + s_h, q_y + q_h)
+            if right - left <= size - margin and bottom - top <= size - margin and left >= 0 - margin and top >= 0 - margin:
+                break
+            scale *= 0.96
 
     # Positions to mimic interlocked monogram (Padres-like)
     s_bbox = font_s.getbbox("S")
@@ -79,26 +67,19 @@ def create_sq_monogram_icon(output_path: Path, size: int = 1024) -> None:
     s_w, s_h = s_bbox[2] - s_bbox[0], s_bbox[3] - s_bbox[1]
     q_w, q_h = q_bbox[2] - q_bbox[0], q_bbox[3] - q_bbox[1]
 
-    # Offset S slightly left/up, Q slightly right/down to interlock
-    s_x = int(size * 0.18)
-    s_y = int(size * 0.18)
-    q_x = int(size * 0.34)
-    q_y = int(size * 0.30)
+    # Compute centered positions then offset to interlock (Padres-like)
+    s_x = (size - s_w) // 2 - int(size * 0.08)
+    s_y = (size - s_h) // 2 - int(size * 0.06)
+    q_x = (size - q_w) // 2 + int(size * 0.08)
+    q_y = (size - q_h) // 2 + int(size * 0.06)
 
-    # Shadow layer for depth
-    text_shadow = Image.new("RGBA", (size, size), (0, 0, 0, 0))
-    ts = ImageDraw.Draw(text_shadow)
-    for dx, dy, a in [(2, 2, 170), (3, 3, 120), (4, 4, 80)]:
-        ts.text((s_x + dx, s_y + dy), "S", font=font_s, fill=(0, 0, 0, a))
-        ts.text((q_x + dx, q_y + dy), "Q", font=font_q, fill=(0, 0, 0, a))
-    text_shadow = text_shadow.filter(ImageFilter.GaussianBlur(radius=size * 0.01))
-    bg = Image.alpha_composite(bg, text_shadow)
+    # No background, minimal or no shadow to keep transparency clean
 
     # Draw letter strokes (thin outline) + white fill
-    stroke = int(max(2, size * 0.01))
     draw_fg = ImageDraw.Draw(bg, "RGBA")
-    draw_fg.text((s_x, s_y), "S", font=font_s, fill=(255, 255, 255, 255), stroke_width=stroke, stroke_fill=(0, 0, 0, 110))
-    draw_fg.text((q_x, q_y), "Q", font=font_q, fill=(255, 255, 255, 255), stroke_width=stroke, stroke_fill=(0, 0, 0, 110))
+    stroke = max(3, int(size * 0.05))
+    draw_fg.text((s_x, s_y), "S", font=font_s, fill=(255, 255, 255, 255), stroke_width=stroke, stroke_fill=(0, 0, 0, 255))
+    draw_fg.text((q_x, q_y), "Q", font=font_q, fill=(255, 255, 255, 255), stroke_width=stroke, stroke_fill=(0, 0, 0, 255))
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     bg.save(output_path)
