@@ -1,45 +1,11 @@
-name: Tauri Desktop Release
+name: Deprecated - Use Root Workflow
 
 on:
   workflow_dispatch: {}
-  push:
-    tags:
-      - 'v*'
 
 jobs:
-  build:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [macos-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        working-directory: mman1130-quiz
+  noop:
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Install app dependencies
-        run: npm ci
-
-      - name: Build app with Tauri and create release
-        uses: tauri-apps/tauri-action@v0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          projectPath: mman1130-quiz
-          tagName: v__VERSION__
-          releaseName: MMAN1130 Quiz v__VERSION__
-          releaseBody: 'Auto-generated release for MMAN1130 Quiz.'
-          releaseDraft: true
-          prerelease: false
+      - run: echo "This workflow is deprecated. Builds run from repo root .github/workflows/tauri-release.yml"
 
