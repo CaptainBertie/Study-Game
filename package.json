@@ -8,14 +8,18 @@
     "build": "tsc -b && vite build",
     "pack:offline": "npm run build && cd dist && printf 'Open index.html in this folder to play.\n' > README-OFFLINE.txt && zip -r ../mman1130-quiz-offline.zip .",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build"
   },
   "dependencies": {
+    "@tauri-apps/api": "^2.7.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
+    "@tauri-apps/cli": "^2.7.1",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react": "^5.0.0",

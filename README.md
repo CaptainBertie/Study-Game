@@ -2,6 +2,10 @@
 
 A lightweight quiz app you can run locally. Supports importing your own questions from a JSON file.
 
+## Direct download
+
+[Download the offline ZIP](./mman1130-quiz-offline.zip)
+
 ## Prerequisites
 - Node.js 18+ (20+ recommended)
 - npm (comes with Node)
@@ -25,6 +29,27 @@ npm run preview
 npm run pack:offline
 ```
 This produces `mman1130-quiz-offline.zip` in the project root. Share that file. Recipients can unzip and double-click `index.html` inside the folder to play.
+## Desktop app (Windows/macOS) with Tauri
+
+Prereqs:
+- macOS: Xcode Command Line Tools and Rust
+- Windows: Rust and Visual Studio C++ Build Tools
+
+Run the desktop app in dev:
+```bash
+npm run tauri:dev
+```
+
+Build installers:
+```bash
+npm run tauri:build
+```
+
+Outputs:
+- macOS: `src-tauri/target/release/bundle/dmg/*.dmg` and `.app`
+- Windows: `src-tauri\\target\\release\\bundle\\msi\\*.msi` and `.exe`
+
+Note: Unsigned builds will show Gatekeeper (macOS) or SmartScreen (Windows) warnings.
 
 If the OS blocks local scripts, right-click `index.html` → Open.
 
